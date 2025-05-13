@@ -1,0 +1,12 @@
+
+
+<div class="calendar-nav">
+    <!-- Create a button for each enrtry in calenarList -->
+    <button
+        *ngFor="let calendar of calendarList"
+        (click)="onCalendarSelected(calendar)"
+        class="calendar-nav_button"
+    >
+        {{ calendar.CalendarName }}
+    </button>
+</div>

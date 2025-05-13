@@ -1,0 +1,29 @@
+
+<div class="header">
+    <img class="logo" src="assets/logo.png" alt="Logo" alt="logo" height="40" width="40"/>
+    <a href="/">Home</a>
+
+    <!-- deleting this will make the header collapse -->
+    <div class="header-links"> 
+        <!-- <a href="/about" class="header-link">
+            <span>About</span>
+        </a>
+
+        <a href="/contact" class="header-link">
+            <span>Contact</span>
+        </a> -->
+    </div>
+
+    <div class="header-dropdown">
+        <button (click)="toggleDropdown()" class="header-dropdown-button">
+            <mat-icon class="dropdown-icon">account_circle</mat-icon>
+        </button>
+        
+        <!-- <img src="assets/menu.svg" alt="" (click)="toggleDropdown()" width="60" height="60"/> -->
+
+        <div class="dropdown">
+            <a href="/login">Login</a>
+        </div>
+    </div>
+
+</div>

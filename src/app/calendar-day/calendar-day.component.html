@@ -1,0 +1,82 @@
+<div class="calendar-day">
+    <span class="calendar-day_date" [id]="'calendar-day_date_' + date.getDate()" [ngClass]="{ 'calendar-day_current' : date.toDateString() == today.toDateString() }">
+        <!-- Date will be passed by the parent component -->
+        {{ date.getMonth() + 1 }}/{{ date.getDate() }}
+    </span>
+
+
+    <div class="calendar-day_events" *ngIf="events.length > 0">
+        <button
+            class="calendar-day_event"
+            (click)="onEventSelected(events[0])"
+        >
+            <p class="calendar-day_event_time">
+                <ng-container *ngIf="events[0].EventStart.getDay() == date.getDay()">
+                {{ events[0].EventStart.getHours() }}:{{ events[0].EventStart.getMinutes() < 10 ? '0' : '' }}{{ events[0].EventStart.getMinutes() }}
+                </ng-container>
+                <ng-container *ngIf="events[0].EventStart.getDay() != date.getDay()">
+                00:00
+                </ng-container>
+                -
+                <ng-container *ngIf="events[0].EventEnd.getDay() == date.getDay()">
+                {{ events[0].EventEnd.getHours() }}:{{ events[0].EventEnd.getMinutes() < 10 ? '0' : '' }}{{ events[0].EventEnd.getMinutes() }}
+                </ng-container>
+                <ng-container *ngIf="events[0].EventEnd.getDay() != date.getDay()">
+                23:59
+                </ng-container>
+            </p>   
+            <p class="calendar-day_event_title">
+                {{ events[0].EventTitle }}
+            </p>
+            
+        </button>
+        <button class="calendar-day_event_more" *ngIf="events.length > 1" (click)="showMoreEvents()">
+            <p class="calendar-day_event_time">
+                {{ events.length - 1 }} more
+            </p>
+        </button>
+    </div>
+
+    <!-- <div class="calendar-day_events" *ngIf="events.length > 0">
+        <button
+            class="calendar-day_event"
+            *ngFor="let event of events"
+            (click)="onEventSelected(event)"
+        >
+            <p class="calendar-day_event_time">
+                <ng-container *ngIf="event.EventStart.getDay() == date.getDay()">
+                {{ event.EventStart.getHours() }}:{{ event.EventStart.getMinutes() < 10 ? '0' : '' }}{{ event.EventStart.getMinutes() }}
+                </ng-container>
+                <ng-container *ngIf="event.EventStart.getDay() != date.getDay()">
+                00:00
+                </ng-container>
+                -
+                <ng-container *ngIf="event.EventEnd.getDay() == date.getDay()">
+                {{ event.EventEnd.getHours() }}:{{ event.EventEnd.getMinutes() < 10 ? '0' : '' }}{{ event.EventEnd.getMinutes() }}
+                </ng-container>
+                <ng-container *ngIf="event.EventEnd.getDay() != date.getDay()">
+                23:59
+                </ng-container>
+            </p>   
+            <p class="calendar-day_event_title">
+                {{ event.EventTitle }}
+            </p>
+            
+        </button>
+
+        
+    </div> -->
+    <app-event-modal
+        *ngIf="isModalOpen()"
+        [event]="selectedEvent()"
+        [close]="closeEventModalEmitter">
+    </app-event-modal>
+    <app-more-events-modal
+        *ngIf="moreEventsModalOpen()"
+        [events]="events"
+        [close]="closeMoreEventsModalEmitter"
+        [openEvent]="openEventEmitter"
+    >
+
+    </app-more-events-modal>
+</div>

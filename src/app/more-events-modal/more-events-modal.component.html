@@ -1,0 +1,17 @@
+<p>more-events-modal works!</p>
+<div class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>More Events</h2>
+        </div>
+        <div class="modal-body">
+            <p *ngIf="events?.length === 0">No additional events available.</p>
+            <div *ngFor="let event of events">
+                <button class="eventButton" (click)="openEvent.emit('openEvent', event)">View {{ event.EventTitle }}</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="close.emit('closeModal')">Close</button>
+        </div>
+    </div>
+</div>

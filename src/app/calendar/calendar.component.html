@@ -1,0 +1,19 @@
+
+<div class="calendar">
+
+
+    <div>
+        <!-- Navbar for calendars -->
+        <app-calendar-nav />
+    </div>
+
+    <!-- Loop through days and create a new calendar-day for each -->
+     <div class="calendar-days">
+        <app-calendar-day
+        
+        *ngFor="let day of days"
+        [date]="day"
+        [calendarId]="calendarId" />
+    </div>
+    
+</div>

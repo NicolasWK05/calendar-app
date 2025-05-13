@@ -1,0 +1,21 @@
+<div class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Event Details</h2>
+        </div>
+        <div class="modal-body">
+            <p><strong>Event Title:</strong> {{ event?.EventTitle }}</p>
+            <p><strong>Event Description:</strong> {{ event?.EventDescription }}</p>
+            
+            <!-- Line through the element -->
+            <hr>
+
+            <p><strong>Event Start:</strong> {{ event?.EventStart }}</p>
+            <p><strong>Event End:</strong> {{ event?.EventEnd }}</p>
+            
+        </div>
+        <div class="modal-footer">
+            <button (click)="close.emit('closeModal')">Close</button>
+        </div>
+    </div>
+</div>

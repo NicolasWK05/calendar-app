@@ -1,0 +1,49 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    text-align: right;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    font-size: medium;
+}
+
+.logo {
+    margin-right: 16px;
+}
+
+.header-links {
+    flex: auto;
+    text-align: center;
+    justify-content: space-evenly;
+    font-size: large;
+}
+
+.header-link {
+    padding: 2rem;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-dropdown {
+    img {
+        color: white;
+    }
+}
+
+.header-dropdown-button { 
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.dropdown-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 3.5rem;
+}

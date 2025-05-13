@@ -1,0 +1,16 @@
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* align-items: center; */
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.calendar-days {
+    /* Grid with column size of 7 */
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 1rem;
+    margin-left: 5vh;
+}
