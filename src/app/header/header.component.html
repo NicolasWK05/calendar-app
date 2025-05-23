@@ -1,17 +1,11 @@
 
 <div class="header">
     <img class="logo" src="assets/logo.png" alt="Logo" alt="logo" height="40" width="40"/>
-    <a href="/">Home</a>
+    <a routerLink="/">Home</a>
 
-    <!-- deleting this will make the header collapse -->
+    <!-- NOTE - Deleting this will collapse the header  -->
     <div class="header-links"> 
-        <!-- <a href="/about" class="header-link">
-            <span>About</span>
-        </a>
 
-        <a href="/contact" class="header-link">
-            <span>Contact</span>
-        </a> -->
     </div>
 
     <div class="header-dropdown">
@@ -21,9 +15,13 @@
         
         <!-- <img src="assets/menu.svg" alt="" (click)="toggleDropdown()" width="60" height="60"/> -->
 
-        <div class="dropdown">
-            <a href="/login">Login</a>
-        </div>
+        <nav class="dropdown" *ngIf="dropdownOpen()">
+            <a routerLink="/profile" routerLinkActive="active">Profile</a><br>
+            
+            <a routerLink="/settings">Settings</a><br>
+            <a routerLink="/login" *ngIf="!isLoggedIn">Login</a><br *ngIf="!isLoggedIn">
+            <a routerLink="/logout" *ngIf="isLoggedIn">Logout</a><br *ngIf="isLoggedIn">
+        </nav>
     </div>
 
 </div>

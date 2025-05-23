@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
 import IUser from '@/Interfaces/IUser';
 
 @Injectable({
@@ -7,10 +7,22 @@ import IUser from '@/Interfaces/IUser';
 export class UserService {
 
   constructor() { }
-
-  getUser(userId: number): IUser | undefined {
-    return users.find(user => user.UserId === userId);
+  // It will be accessed using methods in this service, and will be used to store the user information
+  // NOTE - This is how we store the information after fetching it from the server
+  private user: WritableSignal<IUser | undefined> = signal<IUser | undefined>(undefined);
+  
+  isLoggedIn(): boolean {
+    return this.user() !== undefined;
   }
+
+  // TODO - Remove this, this is just for testing
+  getUser(): IUser | undefined {
+    return this.user();
+  }
+
+  setUser(user: IUser) {
+    this.user.set(user);
+  } // TODO - Remove this, this is just for testing
 }
 
 

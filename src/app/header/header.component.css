@@ -47,3 +47,17 @@ a {
     height: 3.5rem;
     font-size: 3.5rem;
 }
+
+.dropdown {
+    position: absolute;
+    top: 60px;
+    right: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 1rem;
+    width: 200px;
+    text-align: left;
+    color: black;
+}
