@@ -21,7 +21,10 @@
     "paths": {
       "@/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"],
-    }
+    },
+    "lib": [
+      "DOM",
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

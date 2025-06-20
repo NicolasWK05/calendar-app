@@ -1,36 +1,45 @@
-import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import IUser from '@/Interfaces/IUser';
+import { Injectable, signal } from '@angular/core';
+import IUser from './Interfaces/IUser';
+import axios from 'axios';
+import ILogin from './Interfaces/ILogin';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor() { }
-  // It will be accessed using methods in this service, and will be used to store the user information
-  // NOTE - This is how we store the information after fetching it from the server
-  private user: WritableSignal<IUser | undefined> = signal<IUser | undefined>(undefined);
-  
-  isLoggedIn(): boolean {
-    return this.user() !== undefined;
+  async login(user: ILogin) {
+    const res = await axios.post('/Auth/login', {username: user.Username, passwordHash: user.Password});
+    if (res.status === 200) {
+      const token = res.data; // Token should be raw string
+      localStorage.setItem('token', token); // Store token in localStorage
+      return true; // Login successful
+    }
+
+    console.error('Login failed:', res.status, res.statusText);
+    return false; // Login failed
   }
 
-  // TODO - Remove this, this is just for testing
-  getUser(): IUser | undefined {
-    return this.user();
+  async User(): Promise<IUser | null> {
+    if (typeof window === 'undefined') return null; // Check if running in SSR context
+    const token = localStorage.getItem('token'); // NOTE - localStorage is not available in SSR context, so this will only work in client-side rendering
+    if (!token) return null; // No token found, user not logged in
+
+    try {
+      const res = await axios.get<{username: string, userId: number}>('/Auth', {
+        headers: {
+          'Authorization': `Bearer ${token}` // Send token in Authorization header
+        }
+      });
+      let user: IUser = {
+        UserId: res.data.userId,
+        Username: res.data.username
+      }
+      return user; // Return user data
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      return null; // Return null if there's an error
+    }
   }
 
-  setUser(user: IUser) {
-    this.user.set(user);
-  } // TODO - Remove this, this is just for testing
 }
-
-
-const users: IUser[] = [
-  {
-    UserId: 1,
-    Username: 'JohnDoe',
-    PasswordHash: 'hashedpassword123',
-    ProflePicture: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fa.storyblok.com%2Ff%2F191576%2F1200x800%2Fa3640fdc4c%2Fprofile_picture_maker_before.webp&f=1&nofb=1&ipt=fd30af1eaa811e715227c18b04bd137fe7df9fefa40d896b34b5920956e08e46'
-  }
-]

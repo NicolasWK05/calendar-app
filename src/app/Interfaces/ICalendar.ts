@@ -1,6 +1,6 @@
 export default interface ICalendar {
-  CalendarId: Number;
-  UserId: Number;
+  CalendarId: number;
+  UserId: number;
   CalendarName: string;
 }
 

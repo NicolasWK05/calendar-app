@@ -58,15 +58,15 @@ const events: IEvent[] = [
     EventTitle: 'Consume Alcohol',
     EventDescription: 'Discuss project updates',
     EventStart: new Date('2025-05-12T10:00:00'),
-    EventEnd: new Date('2025-06-13T11:00:00'),
+    EventEnd: new Date('2025-05-30T11:00:00'),
   },
   {
     EventId: 2,
     CalendarId: 1,
     EventTitle: 'Meeting',
     EventDescription: 'Discuss project updates',
-    EventStart: new Date('2025-05-09T10:00:00'),
-    EventEnd: new Date('2025-05-09T11:00:00'),
+    EventStart: new Date('2025-06-09T10:00:00'),
+    EventEnd: new Date('2025-06-09T11:00:00'),
   },
   {
     EventId: 3,

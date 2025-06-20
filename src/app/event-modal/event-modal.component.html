@@ -3,7 +3,7 @@
         <div class="modal-header">
             <h2>Event Details</h2>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" *ngIf="!EditMode()">
             <p><strong>Event Title:</strong> {{ event?.EventTitle }}</p>
             <p><strong>Event Description:</strong> {{ event?.EventDescription }}</p>
             
@@ -14,7 +14,23 @@
             <p><strong>Event End:</strong> {{ event?.EventEnd }}</p>
             
         </div>
+        <div class='modal-body' *ngIf="EditMode()">
+            <form>
+                <label for="eventTitle">Event Title:</label>
+                <input type="text" id="eventTitle" [(ngModel)]="event.EventTitle" name="eventTitle" [defaultValue]="event?.EventTitle" required>
+
+                <label for="eventDescription">Event Description:</label>
+                <textarea id="eventDescription" [(ngModel)]="event.EventDescription" name="eventDescription" required></textarea>
+
+                <label for="eventStart">Event Start:</label>
+                <input type="datetime-local" id="eventStart" [(ngModel)]="event.EventStart" name="eventStart" required>
+
+                <label for="eventEnd">Event End:</label>
+                <input type="datetime-local" id="eventEnd" [(ngModel)]="event.EventEnd" name="eventEnd" required>
+            </form>
+        </div>
         <div class="modal-footer">
+            <button (click)="EditMode.set(true)">Edit</button>
             <button (click)="close.emit('closeModal')">Close</button>
         </div>
     </div>

@@ -17,7 +17,12 @@ export class CalendarService {
   }
 
   getUserCalendars(userId: number): ICalendar[] {
-    return calendars.filter(calendar => calendar.UserId === userId);
+    userId = parseInt(userId.toString()); // Ensure userId is a number
+    let s = calendars.filter(calendar => calendar.UserId === userId);
+    if (s.length === 0) {
+      throw new Error('No calendars found for user with ID ' + userId);
+    }
+    return s;
   }
 }
 
@@ -25,7 +30,7 @@ export class CalendarService {
 const calendars: ICalendar[] = [
   {
     CalendarId: 1,
-    UserId: 1,
+    UserId: 5,
     CalendarName: 'My Calendar'
   },
   {
