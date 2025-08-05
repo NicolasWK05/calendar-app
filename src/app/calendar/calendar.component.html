@@ -1,5 +1,5 @@
 
-<div class="calendar">
+<div class="calendar" *ngIf="User() !== null">
 
 
     <div>
@@ -10,10 +10,11 @@
     <!-- Loop through days and create a new calendar-day for each -->
      <div class="calendar-days">
         <app-calendar-day
-        
+
         *ngFor="let day of days"
         [date]="day"
         [calendarId]="calendarId" />
     </div>
-    
+
 </div>
+<div class="calendar-empty" *ngIf="User() === null">

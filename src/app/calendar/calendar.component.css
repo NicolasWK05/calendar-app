@@ -1,16 +1,19 @@
 .calendar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    /* align-items: center; */
-    gap: 1rem;
-    padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .calendar-days {
-    /* Grid with column size of 7 */
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 1rem;
-    margin-left: 5vh;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px; /* Optional: cap width if desired */
+  box-sizing: border-box;
+  margin: 0 auto; /* Center the grid */
 }
