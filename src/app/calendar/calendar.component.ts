@@ -20,7 +20,7 @@ import { Router } from "@angular/router";
   imports: [CalendarDayComponent, CommonModule, CalendarNavComponent],
   templateUrl: "./calendar.component.html",
   styleUrl: "./calendar.component.css",
-  providers: [CalendarService, Router], // NOTE - Only provide if you want a local CalendarService
+  // providers: [CalendarService, Router], // NOTE - Only provide if you want a local CalendarService (Scary stuff here) 
 })
 export class CalendarComponent {
   // private userService = inject(UserService)
