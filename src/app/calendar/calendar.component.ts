@@ -81,4 +81,8 @@ export class CalendarComponent {
   ngAfterContentInit() {
     this.FetchUser(); // Fetch user data after view initialization
   }
+
+  login() {
+    this.router.navigate(["/login"])
+  }
 }

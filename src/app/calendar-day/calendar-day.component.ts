@@ -15,7 +15,7 @@ import { MoreEventsModalComponent } from "../more-events-modal/more-events-modal
 })
 export class CalendarDayComponent {
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(@Inject(DOCUMENT) private document: Document, private eventService: EventService) {
     // Constructor logic here
   }
 
@@ -23,7 +23,7 @@ export class CalendarDayComponent {
   @Input() calendarId!: number; // Calendar ID to identify which calendar to fetch events from
 
   events: IEvent[] = []; // Array to hold events for the selected date
-  eventService: EventService = new EventService();
+  // eventService: EventService = new EventService();
 
   today = new Date(); // Get today's date
 

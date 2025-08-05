@@ -20,6 +20,7 @@ export class EventService {
       calendarId = parseInt(calendarId);
     }
 
+    // TODO - Probably not correct endpoint, update to reflect backend changes.
     let res = await axios.get<IEvent[]>(`/Event`, {
       headers: {
         Authorization: `Bearer ${token}`, // Send token in Authorization header
@@ -28,6 +29,9 @@ export class EventService {
         calendarId: calendarId,
       },
     });
+
+    console.log(`/Api/Event GET: ${res.data}`)
+    return res.data
   }
 
   // Method to get events by date and calendarId
