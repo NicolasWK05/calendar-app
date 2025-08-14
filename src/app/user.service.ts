@@ -29,6 +29,10 @@ export class UserService {
     return false; // Login failed
   }
 
+  async logout() {
+    localStorage.removeItem("token"); // Remove token from localStorage
+  }
+
   async User(): Promise<IUser | null> {
     let token = await this.token();
     if (!token) return null;

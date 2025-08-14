@@ -5,81 +5,201 @@ import {
   Input,
   signal,
   WritableSignal,
+  ViewChild,
 } from "@angular/core";
 import { CalendarDayComponent } from "../calendar-day/calendar-day.component";
 import { CommonModule } from "@angular/common";
 import { CalendarNavComponent } from "../calendar-nav/calendar-nav.component";
+import { CreateEventModalComponent, CreateEventRequest } from "../create-event-modal/create-event-modal.component";
 import { CalendarService } from "@/calendar.service";
+import { EventService } from "@/event.service";
 import { WINDOW } from "src/WINDOW";
 import { UserService } from "@/user.service";
 import IUser from "@/Interfaces/IUser";
 import { Router } from "@angular/router";
+import IEvent from "@/Interfaces/IEvent";
 
 @Component({
   selector: "app-calendar",
-  imports: [CalendarDayComponent, CommonModule, CalendarNavComponent],
+  imports: [CalendarDayComponent, CommonModule, CalendarNavComponent, CreateEventModalComponent],
   templateUrl: "./calendar.component.html",
   styleUrl: "./calendar.component.css",
-  // providers: [CalendarService, Router], // NOTE - Only provide if you want a local CalendarService (Scary stuff here) 
 })
 export class CalendarComponent {
-  // private userService = inject(UserService)
-  private calendarService = inject(CalendarService);
+  
   constructor(
     @Inject(WINDOW) private window: Window,
     private userService: UserService,
     private router: Router,
+    private calendarService: CalendarService,
+    private eventService: EventService
   ) {}
-
+  
   @Input() calendarId: number = 0;
-
+  @ViewChild(CreateEventModalComponent) createEventModal?: CreateEventModalComponent;
+  
   User: WritableSignal<IUser | null> = signal(null);
-
-  date: Date = new Date(Date.now());
+  
+  // Track current displayed month and year
+  currentMonth: WritableSignal<number> = signal(new Date().getMonth());
+  currentYear: WritableSignal<number> = signal(new Date().getFullYear());
+  
+  // Modal state
+  showCreateEventModal: WritableSignal<boolean> = signal(false);
+  selectedDateForEvent: WritableSignal<Date | undefined> = signal(undefined);
+  
   days: Date[] = [];
-  month: number = this.date.getMonth() + 1;
+  events: IEvent[] | null = null;
+  
+  // Month names for display
+  monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
   daysInMonth = (month: number, year: number) => {
     return new Date(year, month, 0).getDate();
   };
 
-  ngOnInit() {
-    const daycount = this.daysInMonth(this.month, this.date.getFullYear());
+  // Generate days for the current month
+  generateDaysForMonth() {
+    this.days = [];
+    const daycount = this.daysInMonth(this.currentMonth() + 1, this.currentYear());
     for (let i = 1; i <= daycount; i++) {
-      this.days.push(new Date(this.date.getFullYear(), this.month - 1, i));
+      this.days.push(new Date(this.currentYear(), this.currentMonth(), i));
+    }
+  }
+
+  // Navigation methods
+  goToPreviousMonth() {
+    if (this.currentMonth() === 0) {
+      this.currentMonth.set(11);
+      this.currentYear.set(this.currentYear() - 1);
+    } else {
+      this.currentMonth.set(this.currentMonth() - 1);
+    }
+    this.generateDaysForMonth();
+    this.getEvents(); // Refresh events when month changes
+  }
+
+  goToNextMonth() {
+    if (this.currentMonth() === 11) {
+      this.currentMonth.set(0);
+      this.currentYear.set(this.currentYear() + 1);
+    } else {
+      this.currentMonth.set(this.currentMonth() + 1);
+    }
+    this.generateDaysForMonth();
+    this.getEvents(); // Refresh events when month changes
+  }
+
+  goToCurrentMonth() {
+    const now = new Date();
+    this.currentMonth.set(now.getMonth());
+    this.currentYear.set(now.getFullYear());
+    this.generateDaysForMonth();
+    this.getEvents(); // Refresh events when month changes
+  }
+
+  // Get formatted month/year string
+  getCurrentMonthYear(): string {
+    return `${this.monthNames[this.currentMonth()]} ${this.currentYear()}`;
+  }
+
+  // Event creation methods
+  openCreateEventModal(selectedDate?: Date) {
+    if (!this.calendarId) {
+      console.error('No calendar ID available');
+      return;
+    }
+    
+    this.selectedDateForEvent.set(selectedDate);
+    this.showCreateEventModal.set(true);
+  }
+
+  closeCreateEventModal() {
+    this.showCreateEventModal.set(false);
+    this.selectedDateForEvent.set(undefined);
+  }
+
+  async createEvent(eventRequest: CreateEventRequest) {
+    // try {
+    //   console.log('Creating event:', eventRequest);
+      
+    //   // Call your event service to create the event
+    //   const response = await fetch('http://localhost:5168/api/Event', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       // Add authorization header if needed
+    //       // 'Authorization': `Bearer ${your_token}`
+    //     },
+    //     body: JSON.stringify(eventRequest)
+    //   });
+
+    //   if (response.ok) {
+    //     console.log('Event created successfully');
+    //     this.createEventModal?.setSubmittingComplete();
+    //     this.closeCreateEventModal();
+    //     this.getEvents(); // Refresh events after creation
+        
+    //     // Show success message (you can implement a toast service)
+    //     console.log('Event created successfully!');
+    //   } else {
+    //     const errorData = await response.json();
+    //     console.error('Error creating event:', errorData);
+    //     this.createEventModal?.setError(errorData.message || 'Failed to create event');
+    //   }
+    // } catch (error) {
+    //   console.error('Error creating event:', error);
+    //   this.createEventModal?.setError('Failed to create event. Please try again.');
+    // }
+  }
+
+  ngOnInit() {
+    this.generateDaysForMonth();
+
+    // We don't want invalid calendar IDs
+    if (isNaN(this.calendarId) && this.calendarId !== undefined) {
+      this.router.navigate(["/"]);
     }
   }
 
   async FetchUser() {
     let user = await this.userService.User();
-    if (user == null) return; // TODO - Handle user not logged in
+    if (user == null) return;
     this.User.set(user);
-
     console.log("User fetched:", user);
-
+    if (this.calendarId) return;
     try {
-      if (!this.calendarId) {
-        console.log(user.UserId);
-        const calendar = this.calendarService
-          .getUserCalendars(user.UserId)
-          .find((c) => c.UserId == user.UserId);
-        console.log("Calendar found:", calendar);
-        if (calendar) {
-          this.window.location.href = `/${calendar.CalendarId}`;
-        }
+      console.log(user.UserId);
+      const calendar = (await this.calendarService
+        .getUserCalendars(user.UserId))
+        .find((c) => c.UserId == user.UserId);
+       
+      console.log("Calendar found:", calendar);
+      if (calendar) {
+        this.window.location.href = `/${calendar.CalendarId}`;
+      } else {
+        console.log("No calendar found for user, redirecting to create calendar.");
       }
     } catch (error) {
       console.error("Error in ngAfterViewInit:", error);
     }
   }
 
-  ngAfterViewInit() {
-    console.log("User Check");
-    if (this.User() == null) return;
-    let user = this.User() as IUser; // Type assertion since we know User is not null here
+  getEvents() {
+    if (!this.calendarId) return;
+
+    this.calendarService.getEvents(this.calendarId, this.currentMonth(), this.currentYear()).then(events => {
+      this.events = events;
+      console.log("Events fetched:", events);
+    });
   }
+
   ngAfterContentInit() {
-    this.FetchUser(); // Fetch user data after view initialization
+    this.FetchUser();
+    this.getEvents(); // Fetch events for the current month
   }
 
   login() {

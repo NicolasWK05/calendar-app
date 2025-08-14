@@ -28,7 +28,7 @@ export class CalendarDayComponent {
   today = new Date(); // Get today's date
 
   ngOnInit() {
-    this.events = this.eventService.getEventsByDate(this.date,this.calendarId);
+    // this.events = this.eventService.getEventsByDate(this.date,this.calendarId);
   }
 
 

@@ -1,7 +1,7 @@
 <div class="calendar-day">
     <span class="calendar-day_date" [id]="'calendar-day_date_' + date.getDate()" [ngClass]="{ 'calendar-day_current' : date.toDateString() == today.toDateString() }">
         <!-- Date will be passed by the parent component -->
-        {{ date.getMonth() + 1 }}/{{ date.getDate() }}
+        {{ date.getDate() }}/{{ date.getMonth() + 1 }}
     </span>
 
 

@@ -1,0 +1,19 @@
+<div class="create-calendar-container">
+  <h2>Create New Calendar</h2>
+  <form (ngSubmit)="onSubmit()" #calendarForm="ngForm">
+    <div class="form-group">
+      <label for="calendarName">Calendar Name</label>
+      <input
+        id="calendarName"
+        name="calendarName"
+        type="text"
+        [(ngModel)]="calendarName"
+        required
+        placeholder="Enter calendar name"
+      />
+    </div>
+    <button class="accent-btn" type="submit" [disabled]="!calendarForm.form.valid">
+      Create Calendar
+    </button>
+  </form>
+</div>

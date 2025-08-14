@@ -1,23 +1,74 @@
-
 <div class="calendar" *ngIf="User() !== null">
+    <!-- Navigation component - will be positioned based on screen size -->
+    <app-calendar-nav />
+    
+    <!-- Calendar content wrapper -->
+    <div class="calendar-content">
+        <!-- Month navigation header -->
+        <div class="month-navigation">
+            <button class="nav-btn" (click)="goToPreviousMonth()" title="Previous Month">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15,18 9,12 15,6"></polyline>
+                </svg>
+            </button>
+            
+            <div class="month-year-display">
+                <h2>{{ getCurrentMonthYear() }}</h2>
+                <div class="header-actions">
+                    <button class="today-btn" (click)="goToCurrentMonth()" title="Go to current month">
+                        Today
+                    </button>
+                    <button class="create-event-btn" (click)="openCreateEventModal()" title="Create new event">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Event
+                    </button>
+                </div>
+            </div>
+            
+            <button class="nav-btn" (click)="goToNextMonth()" title="Next Month">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9,18 15,12 9,6"></polyline>
+                </svg>
+            </button>
+        </div>
 
+        <!-- Calendar days grid -->
+        <div class="calendar-days">
+            <app-calendar-day
+                *ngFor="let day of days"
+                [date]="day"
+                [calendarId]="calendarId" />
+        </div>
 
-    <div>
-        <!-- Navbar for calendars -->
-        <app-calendar-nav />
+        <!-- Quick create button - floating action button for mobile -->
+        <button class="fab-create-event" (click)="openCreateEventModal()" title="Create new event">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
     </div>
-
-    <!-- Loop through days and create a new calendar-day for each -->
-     <div class="calendar-days">
-        <app-calendar-day
-
-        *ngFor="let day of days"
-        [date]="day"
-        [calendarId]="calendarId" />
-    </div>
-
 </div>
-<div class="calendar-empty" *ngIf="User() === null">
-<button (click)="login()">
-    Login
-</button>   
+
+<div class="calendar-unauthorized" *ngIf="User() === null">
+    <div class="unauthorized-container">
+        <img src="assets/lock.svg" alt="Unauthorized" class="unauthorized-icon" />
+        <h2>Unauthorized</h2>
+        <p>You must be logged in to view your calendar.</p>
+        <button class="login-btn" (click)="login()">
+            Login
+        </button>
+    </div>
+</div>
+
+<!-- Create Event Modal -->
+<app-create-event-modal
+    *ngIf="showCreateEventModal()"
+    [calendarId]="calendarId"
+    [selectedDate]="selectedDateForEvent()"
+    (eventCreated)="createEvent($event)"
+    (modalClosed)="closeCreateEventModal()">
+</app-create-event-modal>
